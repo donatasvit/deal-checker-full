@@ -1,0 +1,1834 @@
+\
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deal Checker – Donatas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: rgba(37,99,235,0.08);
+      --danger: #dc2626;
+      --success: #16a34a;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --radius-lg: 14px;
+      --shadow-soft: 0 10px 25px rgba(15,23,42,0.08);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(245,247,251,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto;
+    }
+    .logo-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 16px;
+    }
+    .logo-title h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+    .logo-title span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .summary-item {
+      min-width: 110px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: white;
+      box-shadow: 0 4px 10px rgba(15,23,42,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .summary-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .summary-value {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .summary-value.positive { color: var(--success); }
+    .summary-value.negative { color: var(--danger); }
+    main {
+      max-width: 1200px;
+      margin: 16px auto 24px;
+      padding: 0 16px 24px;
+    }
+    .layout {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .column {
+    .layout .column:first-child { flex: 0.6; }
+    .layout .column:last-child { flex: 0.4; }
+
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px 18px;
+      border: 1px solid #e5e7eb;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h3 {
+      margin: 14px 0 8px;
+      font-size: 14px;
+    }
+    .card small {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    input[type="number"],
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 5px 7px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 12px;
+      font-family: inherit;
+      background: #f9fafb;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 0;
+      background: white;
+      border-color: var(--accent);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      font-weight: 500;
+      transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.1s ease;
+      box-shadow: 0 4px 10px rgba(37,99,235,0.35);
+      white-space: nowrap;
+    }
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: none;
+    }
+    .btn.danger {
+      background: var(--danger);
+      box-shadow: 0 4px 10px rgba(220,38,38,0.35);
+    }
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 5px rgba(15,23,42,0.15);
+    }
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+    .btn-icon {
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .btn-icon:hover {
+      color: var(--danger);
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .row > .field {
+      flex: 1;
+      min-width: 120px;
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+    .field small {
+      display: block;
+      font-size: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #f3f4ff;
+      color: var(--accent);
+      font-size: 10px;
+    }
+    .inline-note {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .warning {
+      font-size: 11px;
+      color: var(--danger);
+      margin-top: 4px;
+    }
+    .success {
+      font-size: 11px;
+      color: var(--success);
+      margin-top: 4px;
+    }
+    .totals-row {
+      margin-top: 6px;
+      font-size: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+    }
+    .totals-row span strong {
+      color: var(--text-main);
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .chip {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      font-size: 11px;
+      cursor: default;
+    }
+    .chip.highlight {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .mt-4 { margin-top: 12px; }
+    .mt-2 { margin-top: 6px; }
+    .mt-1 { margin-top: 3px; }
+    #loader {
+      display: none;
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .api-status {
+      font-size: 11px;
+      margin-top: 4px;
+      color: var(--text-muted);
+    }
+    .api-status.error { color: var(--danger); }
+    .api-status.success { color: var(--success); }
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .archive-table {
+      max-height: 220px;
+      overflow: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .archive-table table {
+      border-collapse: collapse;
+    }
+    .archive-table th, .archive-table td {
+      font-size: 11px;
+    }
+    .currency-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .section-divider {
+      margin: 10px 0;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+      .card {
+        padding: 14px 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo-title">
+        <div class="logo-badge">D</div>
+        <div>
+          <h1>Deal Checker</h1>
+          <span>Asmeninis Donato įrankis (local only)</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn btn-sm secondary" id="newCalcBtn">Naujas skaičiavimas</button>
+        <button type="button" class="btn btn-sm" id="saveDealTopBtn">Išsaugoti deal'ą</button>
+        <button type="button" class="btn btn-sm secondary" id="openArchiveTopBtn">Archyvas</button>
+      </div>
+      <div class="summary-bar">
+        <div class="summary-item">
+          <div class="summary-label">Total KG</div>
+          <div class="summary-value" id="sumKG">0</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Total CBM</div>
+          <div class="summary-value" id="sumCBM">0.000</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Išlaidos</div>
+          <div class="summary-value" id="sumCosts">0.00 EUR</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Pajamos</div>
+          <div class="summary-value" id="sumRevenue">0.00 EUR</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Balansas</div>
+          <div class="summary-value" id="sumBalance">0.00 EUR</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+      <div class="column">
+        <!-- CARGO CARD -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Cargo</h2>
+            <button class="btn btn-sm" id="addCargoRowBtn">+ Pridėti eilutę</button>
+          </div>
+          <small>Krovinių duomenys ir automatiniai CBM / svorio skaičiavimai.</small>
+
+          <div class="mt-2">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>KG</th>
+                  <th>L (cm)</th>
+                  <th>W (cm)</th>
+                  <th>H (cm)</th>
+                  <th>CBM</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cargoBody"></tbody>
+            </table>
+          </div>
+
+          <div class="totals-row" id="cargoTotals">
+            <span><strong>Eilučių:</strong> <span id="totalRows">0</span></span>
+            <span><strong>Bendras KG:</strong> <span id="totalKG">0</span> kg</span>
+            <span><strong>Bendras CBM:</strong> <span id="totalCBM">0.000</span> m³</span>
+          </div>
+          <div class="inline-note">CBM = (L × W × H) / 1 000 000. Jei matmenys neįvesti – CBM gali būti rašomas ranka.</div>
+        </section>
+
+        <!-- TRANSPORT CARD -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Transportas</h2>
+            <span class="pill">AUTO / ORAS / JŪRA / MULTIMODAL</span>
+          </div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label for="transportType">Transporto tipas</label>
+              <select id="transportType">
+                <option value="AUTO">AUTO</option>
+                <option value="ORAS">ORAS</option>
+                <option value="JURA">JŪRA</option>
+                <option value="MULTIMODAL">MULTIMODAL</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- AUTO -->
+          <div id="autoSection" class="mt-4">
+            <h3>AUTO</h3>
+            <div class="row mt-1">
+              <div class="field">
+                <label for="autoMode">Režimas</label>
+                <select id="autoMode">
+                  <option value="LTL">LTL (daliniai)</option>
+                  <option value="FTL">FTL (pilna mašina)</option>
+                </select>
+              </div>
+              <div class="field" id="autoLdmField">
+                <label for="autoLDM">LDM (rankinis)</label>
+                <input type="number" id="autoLDM" step="0.01" min="0" />
+                <div class="inline-note">LDM užimtumas nuo 13.6 – tik indikacijai.</div>
+                <div class="inline-note" id="autoLdmUsage">Užimtumas: 0% iš 13.6 LDM</div>
+              </div>
+              <div class="field" id="autoTrailerField" style="display:none;">
+                <label for="autoTrailer">Priekabos tipas</label>
+                <select id="autoTrailer">
+                  <option value="Tentas">Tentas</option>
+                  <option value="Mega">Mega</option>
+                  <option value="Refas">Refas</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ORAS -->
+          <div id="airSection" class="mt-4" style="display:none;">
+            <h3>ORAS</h3>
+            <div class="row">
+              <div class="field">
+                <label>Realus svoris (KG)</label>
+                <input type="number" id="airRealWeight" readonly />
+              </div>
+              <div class="field">
+                <label>CBM (iš cargo)</label>
+                <input type="number" id="airCBM" readonly />
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="field">
+                <label>Volumetric (CBM × 167)</label>
+                <input type="number" id="airVolumetric" readonly />
+              </div>
+              <div class="field">
+                <label>Chargeable weight</label>
+                <input type="number" id="airChargeable" readonly />
+                <div class="inline-note" id="airChargeableNote">Naudojamas svoris: -</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- JŪRA -->
+          <div id="seaSection" class="mt-4" style="display:none;">
+            <h3>JŪRA</h3>
+            <div class="row">
+              <div class="field">
+                <label for="seaMode">Režimas</label>
+                <select id="seaMode">
+                  <option value="LCL">LCL</option>
+                  <option value="FCL">FCL</option>
+                </select>
+              </div>
+              <div class="field" id="seaContainerField" style="display:none;">
+                <label for="seaContainer">Konteinerio tipas</label>
+                <select id="seaContainer">
+                  <option value="20DC">20DC (max 33 CBM)</option>
+                  <option value="40DC">40DC (max 67 CBM)</option>
+                  <option value="40HC">40HC (max 76 CBM)</option>
+                </select>
+              </div>
+            </div>
+            <div id="seaLclInfo" class="mt-1">
+              <div class="inline-note">LCL: jei CBM &lt; 1 → naudojamas min. 1 CBM.</div>
+              <div class="inline-note">Naudojamas CBM: <span id="seaUsedCBM">0.000</span> m³</div>
+            </div>
+            <div id="seaFclInfo" class="mt-1" style="display:none;">
+              <div class="inline-note">Bendras CBM: <span id="seaTotalCBM">0.000</span> m³</div>
+              <div class="warning" id="seaCapacityWarning" style="display:none;">Perspėjimas: viršytas konteinerio CBM limitas.</div>
+            </div>
+          </div>
+
+          <!-- MULTIMODAL -->
+          <div id="multiSection" class="mt-4" style="display:none;">
+            <h3>MULTIMODAL</h3>
+            <small>Dinaminiai segmentai, kurių suma įtraukiama į bendras išlaidas.</small>
+            <div class="mt-1">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Segmento tipas</th>
+                    <th>Kaina</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="multiBody"></tbody>
+              </table>
+              <button class="btn btn-sm mt-2" id="addMultiRowBtn">+ Pridėti segmentą</button>
+            </div>
+            <div class="totals-row">
+              <span><strong>Multimodal suma:</strong> <span id="multiTotal">0.00</span> <span class="currency-label" id="multiCurrencyLabel">EUR</span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- COSTS CARD -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Išlaidos</h2>
+            <span class="pill">Kaštų struktūra</span>
+          </div>
+          <small>„Išlaidos“ – tai įvairūs transporto, terminalo, dokumentų ir visi kiti su deal'u susiję kaštai.</small>
+          <div class="mt-2">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pavadinimas</th>
+                  <th>Suma</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="costsBody"></tbody>
+            </table>
+            <button class="btn btn-sm mt-2" id="addCostRowBtn">+ Pridėti išlaidą</button>
+          </div>
+          <div class="totals-row">
+            <span><strong>Išlaidos (be multimodal):</strong> <span id="rawCostsTotal">0.00</span> <span class="currency-label" id="rawCostsCurrencyLabel">EUR</span></span>
+            <span><strong>Multimodal:</strong> <span id="costsMultiInclusion">0.00</span> <span class="currency-label" id="costsMultiCurrencyLabel">EUR</span></span>
+          </div>
+          <div class="totals-row">
+            <span><strong>Bendros išlaidos:</strong> <span id="totalCosts">0.00</span> <span class="currency-label" id="totalCostsCurrencyLabel">EUR</span></span>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="column">
+        <!-- CURRENCY & MARGIN / REVENUE -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Pajamos, marža ir valiutos</h2>
+            <span class="pill">Profit logika</span>
+          </div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label for="currencySelect">Valiuta</label>
+              <select id="currencySelect">
+                <option value="EUR" selected>EUR</option>
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                <option value="PLN">PLN</option>
+              </select>
+              <small>Taikoma išlaidoms, pajamoms, balansui.</small>
+            </div>
+            <div class="field">
+              <label>Valiutų kursai</label>
+              <div class="row" style="align-items:flex-end;">
+                <button class="btn btn-sm" id="updateRatesBtn">Atnaujinti kursus</button>
+                <span id="loader">Loading...</span>
+              </div>
+              <div class="inline-note" id="ratesInfo">EUR → USD: - | EUR → GBP: -</div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label for="marginPercent">Marža %</label>
+              <input type="number" id="marginPercent" step="0.1" value="10" />
+              <small>Papildomai uždedamas procentas ant išlaidų.</small>
+            </div>
+            <div class="field">
+              <label for="marginPrice">Kaina pagal % (automatinė)</label>
+              <input type="number" id="marginPrice" readonly />
+              <small>Apskaičiuota: Išlaidos × (1 + marža%).</small>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label for="manualRevenue">Rankinė kliento kaina</label>
+              <input type="number" id="manualRevenue" class="money-input" step="0.01" />
+              <small>Čia vadybininkas gali įrašyti tikslią pasiūlomą kainą.</small>
+            </div>
+            <div class="field">
+              <label>Naudojamos pajamos</label>
+              <input type="number" id="effectiveRevenue" readonly />
+              <small>Jei įrašyta rankinė kaina – naudojama ji, jei ne – kaina pagal procentą.</small>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label>Išlaidos</label>
+              <input type="number" id="summaryCosts" readonly />
+              <small>Visos išlaidos (transportas, terminalai, dokumentai ir kt.).</small>
+            </div>
+            <div class="field">
+              <label>Pajamos</label>
+              <input type="number" id="summaryRevenue" readonly />
+              <small>Įmonės / kliento kainos pasiūlymas.</small>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label>Balansas</label>
+              <input type="number" id="summaryBalance" readonly />
+              <small>Balansas = Pajamos – Išlaidos (kiek uždirbs iš deal'o).</small>
+              <div class="inline-note" id="balanceNote">Balansas neutralus.</div>
+            </div>
+            <div class="field">
+              <label>Faktinė marža %</label>
+              <input type="number" id="summaryMarginPercent" readonly />
+              <small>Skaičiuojama pagal galutinę kainą.</small>
+            </div>
+          </div>
+        </section>
+
+        <!-- CLIENT TEXT -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Tekstas klientui</h2>
+            <span class="pill">Laiško generavimas</span>
+          </div>
+          <div class="row mt-2">
+            <div class="field">
+              <label for="textLang">Kalba</label>
+              <select id="textLang">
+                <option value="LT">LT</option>
+                <option value="EN">EN</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="route">Maršrutas</label>
+              <input type="text" id="route" placeholder="pvz. Vilnius – Hamburg – Dublin" />
+            </div>
+          </div>
+
+          <div class="chip-group mt-2">
+            <label><input type="checkbox" id="showRoute" checked /> Maršrutas</label>
+            <label><input type="checkbox" id="showCargoInfo" checked /> Krovinio info</label>
+            <label><input type="checkbox" id="onlyFinalPrice" /> Tik galutinė kaina</label>
+          </div>
+
+          <div class="mt-2">
+            <button class="btn btn-sm" id="generateTextBtn">Generuoti tekstą</button>
+          </div>
+
+          <div class="mt-2">
+            <label for="clientText" style="font-size:11px;color:var(--text-muted);">Sugeneruotas tekstas</label>
+            <textarea id="clientText"></textarea>
+          </div>
+
+          <div class="row mt-2">
+            <button class="btn btn-sm" id="copyTextBtn">Copy Text</button>
+            <button class="btn btn-sm secondary" id="copyPriceBtn">Copy Price</button>
+          </div>
+        </section>
+
+        <!-- ARCHIVE -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>Archyvas</h2>
+            <span class="pill">LocalStorage</span>
+          </div>
+          <small>Deal'ai saugomi tik tavo naršyklėje – offline, asmeniškai.</small>
+
+          <div class="row mt-2">
+            <div class="field">
+              <label for="dealNotes">Pastabos / vidinis pavadinimas</label>
+              <input type="text" id="dealNotes" placeholder="pvz. Klientas X – sausis" />
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <button class="btn btn-sm" id="saveDealBtn">Išsaugoti deal'ą</button>
+            <button class="btn btn-sm secondary" id="refreshArchiveBtn">Atidaryti archyvą</button>
+            <button class="btn btn-sm secondary" id="exportPdfBtn">Eksportuoti į PDF</button>
+          </div>
+
+          <div class="archive-table mt-2">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Data</th>
+                  <th>Valiuta</th>
+                  <th>Pajamos</th>
+                  <th>Balansas</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="archiveBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- API SECTION -->
+        <section class="card">
+          <div class="card-header-row">
+            <h2>API pavyzdžiai</h2>
+            <span class="pill">Universalus adapteris</span>
+          </div>
+          <small>Visi kvietimai eina per <code>apiRequest()</code>.</small>
+
+          <div class="section-divider"></div>
+
+          <h3>Valiutų kursų API</h3>
+          <small>Naudojamas <code>https://api.exchangerate.host/latest?base=EUR</code>.</small>
+          <div class="api-status" id="fxApiStatus"></div>
+
+          <div class="section-divider"></div>
+
+          <h3>Transporto tarifų API (pavyzdys)</h3>
+          <small>Pseudo forma, kuri gautą kainą prideda prie išlaidų.</small>
+          <div class="row mt-2">
+            <div class="field">
+              <label for="tariffOrigin">Kilmė</label>
+              <input type="text" id="tariffOrigin" placeholder="pvz. Vilnius" />
+            </div>
+            <div class="field">
+              <label for="tariffDestination">Paskirtis</label>
+              <input type="text" id="tariffDestination" placeholder="pvz. Hamburg" />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="field">
+              <label for="tariffWeight">Svoris / CBM</label>
+              <input type="number" id="tariffWeight" step="0.01" />
+            </div>
+          </div>
+          <div class="row mt-2">
+            <button class="btn btn-sm" id="getTariffBtn">Gauti tarifą per API</button>
+          </div>
+          <div class="api-status" id="tariffApiStatus"></div>
+
+          <div class="section-divider"></div>
+
+          <h3>POST /saveDeal (pavyzdys)</h3>
+          <small>Demonstracinis siuntimas į „https://example.com/api/saveDeal“.</small>
+          <div class="row mt-2">
+            <button class="btn btn-sm secondary" id="postDealBtn">Siųsti deal'ą per API (demo)</button>
+          </div>
+          <div class="api-status" id="postDealStatus"></div>
+        </section>
+      </div>
+    </div>
+
+    <footer>© Donatas – vietinis deal checker įrankis (localStorage, be serverio)</footer>
+  </main>
+
+  <script>
+    // ======================== API ADAPTER =============================
+    async function apiRequest(url, method = "GET", data = null, token = null) {
+      try {
+        const options = {
+          method,
+          headers: { "Content-Type": "application/json" }
+        };
+        if (token) options.headers["Authorization"] = "Bearer " + token;
+        if (data) options.body = JSON.stringify(data);
+
+        const res = await fetch(url, options);
+        if (!res.ok) throw new Error("API klaida: " + res.status);
+        return await res.json();
+      } catch (err) {
+        console.error("API ERROR:", err.message);
+        return { error: err.message };
+      }
+    }
+
+    // ======================== GLOBAL STATE =============================
+    const cargoBody = document.getElementById("cargoBody");
+    const multiBody = document.getElementById("multiBody");
+    const costsBody = document.getElementById("costsBody");
+    const archiveBody = document.getElementById("archiveBody");
+
+    const sumKG = document.getElementById("sumKG");
+    const sumCBM = document.getElementById("sumCBM");
+    const sumCosts = document.getElementById("sumCosts");
+    const sumRevenue = document.getElementById("sumRevenue");
+    const sumBalance = document.getElementById("sumBalance");
+
+    const totalRowsEl = document.getElementById("totalRows");
+    const totalKGEl = document.getElementById("totalKG");
+    const totalCBMEl = document.getElementById("totalCBM");
+
+    const autoMode = document.getElementById("autoMode");
+    const autoLDM = document.getElementById("autoLDM");
+    const autoLdmField = document.getElementById("autoLdmField");
+    const autoTrailerField = document.getElementById("autoTrailerField");
+    const autoTrailer = document.getElementById("autoTrailer");
+    const autoLdmUsage = document.getElementById("autoLdmUsage");
+
+    const airSection = document.getElementById("airSection");
+    const seaSection = document.getElementById("seaSection");
+    const multiSection = document.getElementById("multiSection");
+    const autoSection = document.getElementById("autoSection");
+
+    const airRealWeight = document.getElementById("airRealWeight");
+    const airCBM = document.getElementById("airCBM");
+    const airVolumetric = document.getElementById("airVolumetric");
+    const airChargeable = document.getElementById("airChargeable");
+    const airChargeableNote = document.getElementById("airChargeableNote");
+
+    const seaMode = document.getElementById("seaMode");
+    const seaContainerField = document.getElementById("seaContainerField");
+    const seaContainer = document.getElementById("seaContainer");
+    const seaLclInfo = document.getElementById("seaLclInfo");
+    const seaFclInfo = document.getElementById("seaFclInfo");
+    const seaUsedCBM = document.getElementById("seaUsedCBM");
+    const seaTotalCBM = document.getElementById("seaTotalCBM");
+    const seaCapacityWarning = document.getElementById("seaCapacityWarning");
+
+    const multiTotal = document.getElementById("multiTotal");
+    const multiCurrencyLabel = document.getElementById("multiCurrencyLabel");
+    const rawCostsTotal = document.getElementById("rawCostsTotal");
+    const rawCostsCurrencyLabel = document.getElementById("rawCostsCurrencyLabel");
+    const costsMultiInclusion = document.getElementById("costsMultiInclusion");
+    const costsMultiCurrencyLabel = document.getElementById("costsMultiCurrencyLabel");
+    const totalCosts = document.getElementById("totalCosts");
+    const totalCostsCurrencyLabel = document.getElementById("totalCostsCurrencyLabel");
+
+    const currencySelect = document.getElementById("currencySelect");
+    const ratesInfo = document.getElementById("ratesInfo");
+    const loader = document.getElementById("loader");
+    const updateRatesBtn = document.getElementById("updateRatesBtn");
+    const fxApiStatus = document.getElementById("fxApiStatus");
+
+    const marginPercent = document.getElementById("marginPercent");
+    const marginPrice = document.getElementById("marginPrice");
+    const manualRevenue = document.getElementById("manualRevenue");
+    const effectiveRevenue = document.getElementById("effectiveRevenue");
+    const summaryCosts = document.getElementById("summaryCosts");
+    const summaryRevenue = document.getElementById("summaryRevenue");
+    const summaryBalance = document.getElementById("summaryBalance");
+    const balanceNote = document.getElementById("balanceNote");
+    const summaryMarginPercent = document.getElementById("summaryMarginPercent");
+
+    const textLang = document.getElementById("textLang");
+    const routeInput = document.getElementById("route");
+    const showRoute = document.getElementById("showRoute");
+    const showCargoInfo = document.getElementById("showCargoInfo");
+    const onlyFinalPrice = document.getElementById("onlyFinalPrice");
+    const clientText = document.getElementById("clientText");
+
+    const dealNotes = document.getElementById("dealNotes");
+    const fxRates = { EUR: 1, USD: 1, GBP: 1, PLN: 1 };
+    let currentCurrency = "EUR";
+
+    const transportType = document.getElementById("transportType");
+    const tariffOrigin = document.getElementById("tariffOrigin");
+    const tariffDestination = document.getElementById("tariffDestination");
+    const tariffWeight = document.getElementById("tariffWeight");
+    const tariffApiStatus = document.getElementById("tariffApiStatus");
+    const postDealStatus = document.getElementById("postDealStatus");
+
+    // ======================== HELPERS =============================
+    function parseNum(value) {
+      const n = parseFloat(value);
+      return isNaN(n) ? 0 : n;
+    }
+
+    function formatMoney(value) {
+      return (Math.round(value * 100) / 100).toFixed(2);
+    }
+
+    function formatCBM(value) {
+      return (Math.round(value * 1000) / 1000).toFixed(3);
+    }
+
+    function updateCurrencyLabels() {
+      multiCurrencyLabel.textContent = currentCurrency;
+      rawCostsCurrencyLabel.textContent = currentCurrency;
+      costsMultiCurrencyLabel.textContent = currentCurrency;
+      totalCostsCurrencyLabel.textContent = currentCurrency;
+      sumCosts.textContent = formatMoney(parseNum(totalCosts.textContent)) + " " + currentCurrency;
+      sumRevenue.textContent = formatMoney(parseNum(summaryRevenue.value || 0)) + " " + currentCurrency;
+      const bal = parseNum(summaryBalance.value || 0);
+      sumBalance.textContent = formatMoney(bal) + " " + currentCurrency;
+      const balEl = sumBalance;
+      balEl.classList.remove("positive", "negative");
+      if (bal > 0) balEl.classList.add("positive");
+      if (bal < 0) balEl.classList.add("negative");
+    }
+
+    function convertAllMoney(oldCurrency, newCurrency) {
+      const oldRate = fxRates[oldCurrency] || 1;
+      const newRate = fxRates[newCurrency] || 1;
+      if (!oldRate || !newRate) return;
+
+      const factor = newRate / oldRate; // because base is EUR
+
+      const moneyInputs = document.querySelectorAll(".money-input");
+      moneyInputs.forEach((inp) => {
+        const v = parseNum(inp.value);
+        if (!v) return;
+        const eur = v / oldRate;
+        const converted = eur * newRate;
+        inp.value = formatMoney(converted);
+      });
+
+      // recompute totals in new currency from scratch based on inputs
+      recalcAll();
+      updateCurrencyLabels();
+    }
+
+    // ======================== CARGO LOGIC =============================
+    function addCargoRow(data) {
+      const row = document.createElement("tr");
+
+      const indexTd = document.createElement("td");
+      indexTd.textContent = cargoBody.children.length + 1;
+      row.appendChild(indexTd);
+
+      const kgTd = document.createElement("td");
+      const kgInput = document.createElement("input");
+      kgInput.type = "number";
+      kgInput.step = "0.01";
+      kgInput.min = "0";
+      kgInput.value = data && data.kg ? data.kg : "";
+      kgInput.addEventListener("input", recalcAll);
+      kgTd.appendChild(kgInput);
+      row.appendChild(kgTd);
+
+      const lTd = document.createElement("td");
+      const lInput = document.createElement("input");
+      lInput.type = "number";
+      lInput.step = "0.1";
+      lInput.min = "0";
+      lInput.value = data && data.l ? data.l : "";
+      lInput.addEventListener("input", recalcAll);
+      lTd.appendChild(lInput);
+      row.appendChild(lTd);
+
+      const wTd = document.createElement("td");
+      const wInput = document.createElement("input");
+      wInput.type = "number";
+      wInput.step = "0.1";
+      wInput.min = "0";
+      wInput.value = data && data.w ? data.w : "";
+      wInput.addEventListener("input", recalcAll);
+      wTd.appendChild(wInput);
+      row.appendChild(wTd);
+
+      const hTd = document.createElement("td");
+      const hInput = document.createElement("input");
+      hInput.type = "number";
+      hInput.step = "0.1";
+      hInput.min = "0";
+      hInput.value = data && data.h ? data.h : "";
+      hInput.addEventListener("input", recalcAll);
+      hTd.appendChild(hInput);
+      row.appendChild(hTd);
+
+      const cbmTd = document.createElement("td");
+      const cbmInput = document.createElement("input");
+      cbmInput.type = "number";
+      cbmInput.step = "0.001";
+      cbmInput.min = "0";
+      cbmInput.value = data && data.cbm ? data.cbm : "";
+      cbmInput.addEventListener("input", recalcAll);
+      cbmTd.appendChild(cbmInput);
+      row.appendChild(cbmTd);
+
+      const delTd = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "btn-icon";
+      delBtn.textContent = "✕";
+      delBtn.addEventListener("click", () => {
+        row.remove();
+        // Re-index
+        Array.from(cargoBody.children).forEach((tr, idx) => {
+          tr.firstChild.textContent = idx + 1;
+        });
+        recalcAll();
+      });
+      delTd.appendChild(delBtn);
+      row.appendChild(delTd);
+
+      cargoBody.appendChild(row);
+    }
+
+    function computeCargoTotals() {
+      let totalRows = 0;
+      let totalKG = 0;
+      let totalCBM = 0;
+
+      Array.from(cargoBody.children).forEach((tr) => {
+        totalRows++;
+        const inputs = tr.querySelectorAll("input");
+        const kg = parseNum(inputs[0].value);
+        const l = parseNum(inputs[1].value);
+        const w = parseNum(inputs[2].value);
+        const h = parseNum(inputs[3].value);
+        let cbm = parseNum(inputs[4].value);
+
+        if (l > 0 && w > 0 && h > 0) {
+          cbm = (l * w * h) / 1000000;
+          inputs[4].value = formatCBM(cbm);
+        }
+
+        totalKG += kg;
+        totalCBM += cbm;
+      });
+
+      totalRowsEl.textContent = totalRows;
+      totalKGEl.textContent = totalKG.toFixed(2);
+      totalCBMEl.textContent = formatCBM(totalCBM);
+
+      sumKG.textContent = totalKG.toFixed(2);
+      sumCBM.textContent = formatCBM(totalCBM);
+      return { totalRows, totalKG, totalCBM };
+    }
+
+    // ======================== MULTIMODAL & COSTS =============================
+    function addMultiRow(data) {
+      const row = document.createElement("tr");
+
+      const typeTd = document.createElement("td");
+      const typeInput = document.createElement("input");
+      typeInput.type = "text";
+      typeInput.placeholder = "pvz. Road, Sea leg";
+      typeInput.value = data && data.type ? data.type : "";
+      typeInput.addEventListener("input", recalcAll);
+      typeTd.appendChild(typeInput);
+      row.appendChild(typeTd);
+
+      const priceTd = document.createElement("td");
+      const priceInput = document.createElement("input");
+      priceInput.type = "number";
+      priceInput.step = "0.01";
+      priceInput.min = "0";
+      priceInput.className = "money-input";
+      priceInput.value = data && data.price ? data.price : "";
+      priceInput.addEventListener("input", recalcAll);
+      priceTd.appendChild(priceInput);
+      row.appendChild(priceTd);
+
+      const delTd = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "btn-icon";
+      delBtn.textContent = "✕";
+      delBtn.addEventListener("click", () => {
+        row.remove();
+        recalcAll();
+      });
+      delTd.appendChild(delBtn);
+      row.appendChild(delTd);
+
+      multiBody.appendChild(row);
+    }
+
+    function addCostRow(data) {
+      const row = document.createElement("tr");
+
+      const nameTd = document.createElement("td");
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.placeholder = "pvz. Transportas, terminalas...";
+      nameInput.value = data && data.name ? data.name : "";
+      nameInput.addEventListener("input", recalcAll);
+      nameTd.appendChild(nameInput);
+      row.appendChild(nameTd);
+
+      const priceTd = document.createElement("td");
+      const priceInput = document.createElement("input");
+      priceInput.type = "number";
+      priceInput.step = "0.01";
+      priceInput.min = "0";
+      priceInput.className = "money-input";
+      priceInput.value = data && data.amount ? data.amount : "";
+      priceInput.addEventListener("input", recalcAll);
+      priceTd.appendChild(priceInput);
+      row.appendChild(priceTd);
+
+      const delTd = document.createElement("td");
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "btn-icon";
+      delBtn.textContent = "✕";
+      delBtn.addEventListener("click", () => {
+        row.remove();
+        recalcAll();
+      });
+      delTd.appendChild(delBtn);
+      row.appendChild(delTd);
+
+      costsBody.appendChild(row);
+    }
+
+    function computeMultiTotal() {
+      let total = 0;
+      Array.from(multiBody.children).forEach((tr) => {
+        const inputs = tr.querySelectorAll("input");
+        const val = parseNum(inputs[1].value);
+        total += val;
+      });
+      multiTotal.textContent = formatMoney(total);
+      return total;
+    }
+
+    function computeCostsTotal(multimodalTotal) {
+      let rawTotal = 0;
+      Array.from(costsBody.children).forEach((tr) => {
+        const inputs = tr.querySelectorAll("input");
+        const val = parseNum(inputs[1].value);
+        rawTotal += val;
+      });
+      rawCostsTotal.textContent = formatMoney(rawTotal);
+      costsMultiInclusion.textContent = formatMoney(multimodalTotal);
+      const sum = rawTotal + multimodalTotal;
+      totalCosts.textContent = formatMoney(sum);
+      return { rawTotal, sum };
+    }
+
+    // ======================== TRANSPORT LOGIC =============================
+    function updateTransportVisibility() {
+      const type = transportType.value;
+      autoSection.style.display = type === "AUTO" ? "block" : "none";
+      airSection.style.display = type === "ORAS" ? "block" : "none";
+      seaSection.style.display = type === "JŪRA" ? "block" : "none";
+      multiSection.style.display = type === "MULTIMODAL" ? "block" : "none";
+    }
+
+    function updateAutoModeVisibility() {
+      const mode = autoMode.value;
+      if (mode === "LTL") {
+        autoLdmField.style.display = "block";
+        autoTrailerField.style.display = "none";
+      } else {
+        autoLdmField.style.display = "none";
+        autoTrailerField.style.display = "block";
+      }
+    }
+
+    function updateAutoLdmUsage() {
+      const ldm = parseNum(autoLDM.value);
+      const usage = ldm <= 0 ? 0 : Math.min(100, (ldm / 13.6) * 100);
+      autoLdmUsage.textContent = "Užimtumas: " + usage.toFixed(1) + "% iš 13.6 LDM";
+    }
+
+    function updateAirFromCargo(cargoTotals) {
+      airRealWeight.value = cargoTotals.totalKG.toFixed(2);
+      airCBM.value = formatCBM(cargoTotals.totalCBM);
+      const vol = cargoTotals.totalCBM * 167;
+      airVolumetric.value = vol.toFixed(2);
+      const charge = Math.max(cargoTotals.totalKG, vol);
+      airChargeable.value = charge.toFixed(2);
+      let note = "Naudojamas svoris: -";
+      if (charge === cargoTotals.totalKG && charge === vol) {
+        note = "Naudojamas svoris: vienodas realus ir volumetric.";
+      } else if (charge === cargoTotals.totalKG) {
+        note = "Naudojamas svoris: realus svoris (kg).";
+      } else {
+        note = "Naudojamas svoris: volumetric (CBM × 167).";
+      }
+      airChargeableNote.textContent = note;
+    }
+
+    function updateSeaFromCargo(cargoTotals) {
+      const cbm = cargoTotals.totalCBM;
+      if (seaMode.value === "LCL") {
+        const used = Math.max(cbm, 1);
+        seaUsedCBM.textContent = formatCBM(used);
+        seaLclInfo.style.display = "block";
+        seaFclInfo.style.display = "none";
+      } else {
+        seaLclInfo.style.display = "none";
+        seaFclInfo.style.display = "block";
+        seaTotalCBM.textContent = formatCBM(cbm);
+        let maxCBM = 33;
+        const container = seaContainer.value;
+        if (container === "40DC") maxCBM = 67;
+        if (container === "40HC") maxCBM = 76;
+        if (cbm > maxCBM) {
+          seaCapacityWarning.style.display = "block";
+        } else {
+          seaCapacityWarning.style.display = "none";
+        }
+      }
+    }
+
+    // ======================== MARGIN / REVENUE / BALANCE =============================
+    function updateMarginAndRevenue(costSum) {
+      const costsVal = costSum;
+      const marginPct = parseNum(marginPercent.value);
+      const suggested = costsVal * (1 + marginPct / 100);
+      marginPrice.value = costsVal ? formatMoney(suggested) : "";
+
+      const manualVal = parseNum(manualRevenue.value);
+      let usedRevenue = 0;
+      if (manualRevenue.value !== "" && manualVal > 0) {
+        usedRevenue = manualVal;
+      } else {
+        usedRevenue = suggested;
+      }
+      effectiveRevenue.value = usedRevenue ? formatMoney(usedRevenue) : "";
+      summaryCosts.value = costsVal ? formatMoney(costsVal) : "";
+      summaryRevenue.value = usedRevenue ? formatMoney(usedRevenue) : "";
+
+      const balance = usedRevenue - costsVal;
+      summaryBalance.value = formatMoney(balance);
+      summaryMarginPercent.value =
+        costsVal > 0 ? ((balance / costsVal) * 100).toFixed(2) : "0.00";
+
+      // balance note + header summary coloring
+      if (balance > 0.0001) {
+        balanceNote.textContent = "Balansas teigiamas – deal'as pelningas.";
+        balanceNote.classList.remove("warning");
+        balanceNote.classList.add("success");
+      } else if (balance < -0.0001) {
+        balanceNote.textContent = "Balansas neigiamas – deal'as nuostolingas.";
+        balanceNote.classList.remove("success");
+        balanceNote.classList.add("warning");
+      } else {
+        balanceNote.textContent = "Balansas neutralus.";
+        balanceNote.classList.remove("success", "warning");
+      }
+
+      sumCosts.textContent = formatMoney(costsVal) + " " + currentCurrency;
+      sumRevenue.textContent = formatMoney(usedRevenue) + " " + currentCurrency;
+      sumBalance.textContent = formatMoney(balance) + " " + currentCurrency;
+      sumBalance.classList.remove("positive", "negative");
+      if (balance > 0.0001) sumBalance.classList.add("positive");
+      if (balance < -0.0001) sumBalance.classList.add("negative");
+    }
+
+    // ======================== CLIENT TEXT =============================
+    function generateClientText() {
+      const lang = textLang.value;
+      const route = routeInput.value.trim();
+      const revenueVal = parseNum(summaryRevenue.value);
+      const currency = currentCurrency;
+      const usedRoute = showRoute.checked && route ? route : null;
+
+      const cargoRows = Array.from(cargoBody.children);
+      let cargoSummary = "";
+      if (showCargoInfo.checked && cargoRows.length > 0) {
+        const totals = computeCargoTotals();
+        cargoSummary =
+          (lang === "LT"
+            ? "Krovinys: bendras svoris " +
+              totals.totalKG.toFixed(2) +
+              " kg, bendras tūris " +
+              formatCBM(totals.totalCBM) +
+              " m³."
+            : "Cargo: total weight " +
+              totals.totalKG.toFixed(2) +
+              " kg, total volume " +
+              formatCBM(totals.totalCBM) +
+              " m³.");
+      }
+
+      let priceText =
+        revenueVal > 0
+          ? (lang === "LT"
+              ? "Galutinė siūloma kaina: " +
+                formatMoney(revenueVal) +
+                " " +
+                currency +
+                "."
+              : "Final offered price: " +
+                formatMoney(revenueVal) +
+                " " +
+                currency +
+                ".")
+          : "";
+
+      let text = "";
+      if (lang === "LT") {
+        text += "Sveiki,\n\n";
+        if (!onlyFinalPrice.checked) {
+          if (usedRoute) {
+            text += "Maršrutas: " + usedRoute + ".\n";
+          }
+          if (cargoSummary) {
+            text += cargoSummary + "\n";
+          }
+        }
+        if (priceText) {
+          text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
+        }
+        text += "\nJei reikės korekcijų ar papildomos informacijos – parašykite.";
+      } else {
+        text += "Hello,\n\n";
+        if (!onlyFinalPrice.checked) {
+          if (usedRoute) {
+            text += "Route: " + usedRoute + ".\n";
+          }
+          if (cargoSummary) {
+            text += cargoSummary + "\n";
+          }
+        }
+        if (priceText) {
+          text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
+        }
+        text += "\nIf you need any changes or additional details, let me know.";
+      }
+
+      clientText.value = text;
+    }
+
+    // ======================== ARCHIVE (LOCALSTORAGE) =============================
+    const LS_KEY = "dealCheckerDealsV1";
+
+    function getArchive() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.error("Archive parse error", e);
+        return [];
+      }
+    }
+
+    function saveArchive(arr) {
+      localStorage.setItem(LS_KEY, JSON.stringify(arr));
+    }
+
+    function buildDealObject() {
+      const cargo = Array.from(cargoBody.children).map((tr) => {
+        const inputs = tr.querySelectorAll("input");
+        return {
+          kg: parseNum(inputs[0].value),
+          l: parseNum(inputs[1].value),
+          w: parseNum(inputs[2].value),
+          h: parseNum(inputs[3].value),
+          cbm: parseNum(inputs[4].value)
+        };
+      });
+
+      const multimodal = Array.from(multiBody.children).map((tr) => {
+        const inputs = tr.querySelectorAll("input");
+        return {
+          type: inputs[0].value || "",
+          price: parseNum(inputs[1].value)
+        };
+      });
+
+      const costs = Array.from(costsBody.children).map((tr) => {
+        const inputs = tr.querySelectorAll("input");
+        return {
+          name: inputs[0].value || "",
+          amount: parseNum(inputs[1].value)
+        };
+      });
+
+      const transport = {
+        type: transportType.value,
+        autoMode: autoMode.value,
+        autoLDM: parseNum(autoLDM.value),
+        autoTrailer: autoTrailer.value,
+        air: {
+          real: parseNum(airRealWeight.value),
+          cbm: parseNum(airCBM.value),
+          volumetric: parseNum(airVolumetric.value),
+          chargeable: parseNum(airChargeable.value)
+        },
+        sea: {
+          mode: seaMode.value,
+          container: seaContainer.value,
+          usedCBM: parseNum(seaUsedCBM.textContent || 0),
+          totalCBM: parseNum(seaTotalCBM.textContent || 0)
+        },
+        multimodal
+      };
+
+      const revenue = parseNum(summaryRevenue.value);
+      const marginPct = parseNum(marginPercent.value);
+      const balance = parseNum(summaryBalance.value);
+      const route = routeInput.value || "";
+      const notes = dealNotes.value || "";
+
+      const deal = {
+        id: "D" + Date.now(),
+        timestamp: new Date().toISOString(),
+        currency: currentCurrency,
+        cargo,
+        transport,
+        costs,
+        revenue,
+        marginPercent: marginPct,
+        balance,
+        route,
+        notes
+      };
+      return deal;
+    }
+
+    function loadDealIntoForm(deal) {
+      // Clear existing rows
+      cargoBody.innerHTML = "";
+      multiBody.innerHTML = "";
+      costsBody.innerHTML = "";
+
+      // Currency
+      if (deal.currency && fxRates[deal.currency] !== undefined) {
+        const oldCur = currentCurrency;
+        currentCurrency = deal.currency;
+        currencySelect.value = deal.currency;
+        updateCurrencyLabels();
+        // We will assign values in that currency directly
+      }
+
+      // Cargo
+      (deal.cargo || []).forEach((row) => addCargoRow(row));
+      if ((deal.cargo || []).length === 0) addCargoRow();
+
+      // Multimodal
+      (deal.transport && deal.transport.multimodal || []).forEach((row) =>
+        addMultiRow(row)
+      );
+      if ((deal.transport && deal.transport.multimodal || []).length === 0)
+        addMultiRow();
+
+      // Costs
+      (deal.costs || []).forEach((row) => addCostRow(row));
+      if ((deal.costs || []).length === 0) addCostRow();
+
+      // Transport meta
+      if (deal.transport) {
+        transportType.value = deal.transport.type || "AUTO";
+        autoMode.value = deal.transport.autoMode || "LTL";
+        autoLDM.value =
+          deal.transport.autoLDM !== undefined ? deal.transport.autoLDM : "";
+        autoTrailer.value = deal.transport.autoTrailer || "Tentas";
+        seaMode.value = deal.transport.sea && deal.transport.sea.mode
+          ? deal.transport.sea.mode
+          : "LCL";
+        seaContainer.value =
+          deal.transport.sea && deal.transport.sea.container
+            ? deal.transport.sea.container
+            : "20DC";
+      }
+
+      marginPercent.value =
+        deal.marginPercent !== undefined ? deal.marginPercent : 10;
+      manualRevenue.value = ""; // paliekame tuščią – naudoti procentą arba vartotojo sprendimą
+      routeInput.value = deal.route || "";
+      dealNotes.value = deal.notes || "";
+
+      recalcAll();
+    }
+
+    function renderArchiveTable() {
+      const list = getArchive().slice().sort((a, b) => {
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      });
+      archiveBody.innerHTML = "";
+      list.forEach((deal) => {
+        const tr = document.createElement("tr");
+
+        const idTd = document.createElement("td");
+        idTd.textContent = deal.id;
+        tr.appendChild(idTd);
+
+        const dateTd = document.createElement("td");
+        const d = new Date(deal.timestamp);
+        dateTd.textContent =
+          isNaN(d.getTime()) ? "-" : d.toLocaleString("lt-LT");
+        tr.appendChild(dateTd);
+
+        const curTd = document.createElement("td");
+        curTd.textContent = deal.currency || "EUR";
+        tr.appendChild(curTd);
+
+        const revTd = document.createElement("td");
+        revTd.textContent = formatMoney(deal.revenue || 0);
+        tr.appendChild(revTd);
+
+        const balTd = document.createElement("td");
+        balTd.textContent = formatMoney(deal.balance || 0);
+        tr.appendChild(balTd);
+
+        const actTd = document.createElement("td");
+        const openBtn = document.createElement("button");
+        openBtn.type = "button";
+        openBtn.className = "btn btn-sm secondary";
+        openBtn.textContent = "Atidaryti";
+        openBtn.style.marginRight = "4px";
+        openBtn.addEventListener("click", () => loadDealIntoForm(deal));
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "btn btn-sm danger";
+        delBtn.textContent = "Ištrinti";
+        delBtn.addEventListener("click", () => {
+          const arr = getArchive().filter((d) => d.id !== deal.id);
+          saveArchive(arr);
+          renderArchiveTable();
+        });
+
+        actTd.appendChild(openBtn);
+        actTd.appendChild(delBtn);
+        tr.appendChild(actTd);
+
+        archiveBody.appendChild(tr);
+      });
+    }
+
+    // ======================== RECALC MASTER =============================
+    function recalcAll() {
+      const cargoTotals = computeCargoTotals();
+
+      // Transport
+      updateTransportVisibility();
+      updateAutoModeVisibility();
+      updateAutoLdmUsage();
+      updateAirFromCargo(cargoTotals);
+      updateSeaFromCargo(cargoTotals);
+
+      // Multimodal + costs
+      const multiTotalVal = computeMultiTotal();
+      const costs = computeCostsTotal(multiTotalVal);
+
+      // Margin, revenue and balance
+      updateMarginAndRevenue(costs.sum);
+      updateCurrencyLabels();
+    }
+
+    // ======================== FX API =============================
+    async function updateRates() {
+      loader.style.display = "inline-block";
+      fxApiStatus.textContent = "";
+      fxApiStatus.className = "api-status";
+      try {
+        const result = await apiRequest("https://api.exchangerate.host/latest?base=EUR");
+        if (result.error) throw new Error(result.error);
+        if (!result.rates) throw new Error("Nerasti kursai");
+
+        fxRates.EUR = 1;
+        fxRates.USD = result.rates.USD || fxRates.USD;
+        fxRates.GBP = result.rates.GBP || fxRates.GBP;
+        fxRates.PLN = result.rates.PLN || fxRates.PLN;
+
+        ratesInfo.textContent =
+          "EUR → USD: " +
+          fxRates.USD.toFixed(4) +
+          " | EUR → GBP: " +
+          fxRates.GBP.toFixed(4);
+        fxApiStatus.textContent = "Kursai sėkmingai atnaujinti.";
+        fxApiStatus.classList.add("success");
+      } catch (e) {
+        fxApiStatus.textContent = "Klaida gaunant kursus: " + e.message;
+        fxApiStatus.classList.add("error");
+      } finally {
+        loader.style.display = "none";
+      }
+    }
+
+    // ======================== TARIFF API (DEMO) =============================
+    async function getTariffDemo() {
+      tariffApiStatus.textContent = "";
+      tariffApiStatus.className = "api-status";
+      const origin = tariffOrigin.value.trim();
+      const dest = tariffDestination.value.trim();
+      const weight = parseNum(tariffWeight.value);
+      if (!origin || !dest || weight <= 0) {
+        tariffApiStatus.textContent = "Įvesk kilmę, paskirtį ir svorį/CBM.";
+        tariffApiStatus.classList.add("error");
+        return;
+      }
+      tariffApiStatus.textContent = "Kreipiamasi į demo API...";
+      try {
+        // Naudojame viešą demo API (placeholder)
+        const res = await apiRequest("https://jsonplaceholder.typicode.com/posts/1");
+        if (res.error) throw new Error(res.error);
+        // Pavyzdinė logika: pseudo kaina = weight * 3
+        const price = weight * 3;
+        addCostRow({ name: "API Transporto tarifas (" + origin + "–" + dest + ")", amount: price });
+        tariffApiStatus.textContent =
+          "Tarifas gautas ir pridėtas prie išlaidų: " +
+          formatMoney(price) +
+          " " +
+          currentCurrency +
+          ".";
+        tariffApiStatus.classList.add("success");
+        recalcAll();
+      } catch (e) {
+        tariffApiStatus.textContent = "Klaida gaunant tarifą: " + e.message;
+        tariffApiStatus.classList.add("error");
+      }
+    }
+
+    // ======================== POST DEAL DEMO =============================
+    async function postDealDemo() {
+      postDealStatus.textContent = "";
+      postDealStatus.className = "api-status";
+      const deal = buildDealObject();
+      postDealStatus.textContent = "Siunčiama demo užklausa...";
+      try {
+        const res = await apiRequest(
+          "https://example.com/api/saveDeal",
+          "POST",
+          deal,
+          "DEMO_TOKEN"
+        );
+        if (res.error) throw new Error(res.error);
+        postDealStatus.textContent = "Deal sėkmingai išsiųstas (demo).";
+        postDealStatus.classList.add("success");
+      } catch (e) {
+        postDealStatus.textContent =
+          "Tik demonstracija – reali užklausa gali būti atmesta naršyklės dėl CORS. Klaida: " +
+          e.message;
+        postDealStatus.classList.add("error");
+      }
+    }
+
+    // ======================== INIT =============================
+    document.getElementById("addCargoRowBtn").addEventListener("click", () => {
+      addCargoRow();
+      recalcAll();
+    });
+
+    document.getElementById("addMultiRowBtn").addEventListener("click", () => {
+      addMultiRow();
+      recalcAll();
+    });
+
+    document.getElementById("addCostRowBtn").addEventListener("click", () => {
+      addCostRow();
+      recalcAll();
+    });
+
+    transportType.addEventListener("change", recalcAll);
+    autoMode.addEventListener("change", recalcAll);
+    autoLDM.addEventListener("input", () => {
+      updateAutoLdmUsage();
+    });
+    seaMode.addEventListener("change", recalcAll);
+    seaContainer.addEventListener("change", recalcAll);
+
+    marginPercent.addEventListener("input", recalcAll);
+    manualRevenue.addEventListener("input", recalcAll);
+
+    currencySelect.addEventListener("change", () => {
+      const oldCurrency = currentCurrency;
+      const newCurrency = currencySelect.value;
+      if (oldCurrency === newCurrency) return;
+      convertAllMoney(oldCurrency, newCurrency);
+      currentCurrency = newCurrency;
+      recalcAll();
+    });
+
+    updateRatesBtn.addEventListener("click", updateRates);
+
+    document.getElementById("generateTextBtn").addEventListener("click", generateClientText);
+
+    document.getElementById("copyTextBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(clientText.value);
+      } catch (e) {
+        alert("Nepavyko nukopijuoti teksto. Pamėgink pažymėti ir kopijuoti ranka.");
+      }
+    });
+
+    document.getElementById("copyPriceBtn").addEventListener("click", async () => {
+      const rev = parseNum(summaryRevenue.value);
+      const txt = formatMoney(rev) + " " + currentCurrency;
+      try {
+        await navigator.clipboard.writeText(txt);
+      } catch (e) {
+        alert("Nepavyko nukopijuoti kainos. Pamėgink pažymėti ir kopijuoti ranka.");
+      }
+    });
+
+    document.getElementById("saveDealBtn").addEventListener("click", () => {
+      const arr = getArchive();
+      const deal = buildDealObject();
+      arr.push(deal);
+      saveArchive(arr);
+      renderArchiveTable();
+    });
+
+    document.getElementById("refreshArchiveBtn").addEventListener("click", () => {
+      renderArchiveTable();
+    });
+
+    document.getElementById("getTariffBtn").addEventListener("click", getTariffDemo);
+    document.getElementById("postDealBtn").addEventListener("click", postDealDemo);
+
+
+    function newCalculation() {
+      // Reset cargo, multimodal, costs
+      cargoBody.innerHTML = "";
+      multiBody.innerHTML = "";
+      costsBody.innerHTML = "";
+      // Default one empty row for each
+      addCargoRow();
+      addMultiRow();
+      addCostRow();
+      // Reset transport defaults
+      transportType.value = "AUTO";
+      autoMode.value = "LTL";
+      autoLDM.value = "";
+      autoTrailer.value = "Tentas";
+      seaMode.value = "LCL";
+      seaContainer.value = "20DC";
+      // Reset margin / revenue / route / notes / client text
+      marginPercent.value = 10;
+      manualRevenue.value = "";
+      routeInput.value = "";
+      dealNotes.value = "";
+      clientText.value = "";
+      // Recalculate everything
+      recalcAll();
+    }
+
+    const newCalcBtn = document.getElementById("newCalcBtn");
+    if (newCalcBtn) {
+      newCalcBtn.addEventListener("click", newCalculation);
+    }
+    const saveDealTopBtn = document.getElementById("saveDealTopBtn");
+    if (saveDealTopBtn) {
+      saveDealTopBtn.addEventListener("click", () => {
+        const arr = getArchive();
+        const deal = buildDealObject();
+        arr.push(deal);
+        saveArchive(arr);
+        renderArchiveTable();
+      });
+    }
+    const openArchiveTopBtn = document.getElementById("openArchiveTopBtn");
+    if (openArchiveTopBtn) {
+      openArchiveTopBtn.addEventListener("click", () => {
+        renderArchiveTable();
+      });
+    }
+
+    const exportPdfBtn = document.getElementById("exportPdfBtn");
+    if (exportPdfBtn) {
+      exportPdfBtn.addEventListener("click", () => {
+        window.print();
+      });
+    }
+
+    window.addEventListener("load", () => {
+      // initial rows
+      addCargoRow();
+      addMultiRow();
+      addCostRow();
+      renderArchiveTable();
+      recalcAll();
+    });
+  </script>
+</body>
+</html>
