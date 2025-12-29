@@ -1,4 +1,3 @@
-\
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -19,13 +18,10 @@
       --radius-lg: 14px;
       --shadow-soft: 0 10px 25px rgba(15,23,42,0.08);
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text-main);
     }
@@ -105,6 +101,7 @@
     }
     .summary-value.positive { color: var(--success); }
     .summary-value.negative { color: var(--danger); }
+
     main {
       max-width: 1200px;
       margin: 16px auto 24px;
@@ -115,15 +112,18 @@
       gap: 16px;
       align-items: flex-start;
     }
-    .column {
-    .layout .column:first-child { flex: 0.6; }
-    .layout .column:last-child { flex: 0.4; }
 
+    /* FIX: original CSS had invalid nesting; keep this correct */
+    .column {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      min-width: 0;
     }
+    .layout .column:first-child { flex: 0.6; }
+    .layout .column:last-child { flex: 0.4; }
+
     .card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
@@ -178,9 +178,8 @@
       letter-spacing: 0.03em;
       color: var(--text-muted);
     }
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
+    tbody tr:last-child td { border-bottom: none; }
+
     input[type="number"],
     input[type="text"],
     select,
@@ -193,10 +192,7 @@
       font-family: inherit;
       background: #f9fafb;
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+    textarea { resize: vertical; min-height: 80px; }
     input:focus, select:focus, textarea:focus {
       outline: 2px solid var(--accent);
       outline-offset: 0;
@@ -233,10 +229,7 @@
       transform: translateY(1px);
       box-shadow: 0 2px 5px rgba(15,23,42,0.15);
     }
-    .btn-sm {
-      padding: 4px 8px;
-      font-size: 11px;
-    }
+    .btn-sm { padding: 4px 8px; font-size: 11px; }
     .btn-icon {
       padding: 2px 6px;
       border-radius: 8px;
@@ -246,28 +239,17 @@
       color: var(--text-muted);
       font-size: 13px;
     }
-    .btn-icon:hover {
-      color: var(--danger);
-    }
-    .row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .row > .field {
-      flex: 1;
-      min-width: 120px;
-    }
+    .btn-icon:hover { color: var(--danger); }
+
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .row > .field { flex: 1; min-width: 120px; }
     .field label {
       display: block;
       font-size: 11px;
       color: var(--text-muted);
       margin-bottom: 3px;
     }
-    .field small {
-      display: block;
-      font-size: 10px;
-    }
+    .field small { display: block; font-size: 10px; }
     .badge {
       display: inline-flex;
       padding: 2px 6px;
@@ -276,21 +258,9 @@
       color: var(--accent);
       font-size: 10px;
     }
-    .inline-note {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .warning {
-      font-size: 11px;
-      color: var(--danger);
-      margin-top: 4px;
-    }
-    .success {
-      font-size: 11px;
-      color: var(--success);
-      margin-top: 4px;
-    }
+    .inline-note { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .warning { font-size: 11px; color: var(--danger); margin-top: 4px; }
+    .success { font-size: 11px; color: var(--success); margin-top: 4px; }
     .totals-row {
       margin-top: 6px;
       font-size: 12px;
@@ -299,46 +269,16 @@
       flex-wrap: wrap;
       color: var(--text-muted);
     }
-    .totals-row span strong {
-      color: var(--text-main);
-    }
-    .flex-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .chip-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-    .chip {
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      font-size: 11px;
-      cursor: default;
-    }
-    .chip.highlight {
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
+    .totals-row span strong { color: var(--text-main); }
+
+    .chip-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .chip { padding: 3px 8px; border-radius: 999px; background: #f1f5f9; font-size: 11px; cursor: default; }
+    .chip.highlight { background: var(--accent-soft); color: var(--accent); }
     .mt-4 { margin-top: 12px; }
     .mt-2 { margin-top: 6px; }
     .mt-1 { margin-top: 3px; }
-    #loader {
-      display: none;
-      font-size: 11px;
-      color: var(--accent);
-    }
-    .api-status {
-      font-size: 11px;
-      margin-top: 4px;
-      color: var(--text-muted);
-    }
+    #loader { display: none; font-size: 11px; color: var(--accent); }
+    .api-status { font-size: 11px; margin-top: 4px; color: var(--text-muted); }
     .api-status.error { color: var(--danger); }
     .api-status.success { color: var(--success); }
     footer {
@@ -353,28 +293,55 @@
       border-radius: 10px;
       border: 1px solid var(--border);
     }
-    .archive-table table {
-      border-collapse: collapse;
+    .archive-table th, .archive-table td { font-size: 11px; }
+    .currency-label { font-size: 11px; color: var(--text-muted); }
+    .section-divider { margin: 10px 0; height: 1px; background: #e5e7eb; }
+
+    /* README content styling */
+    .about p { margin: 8px 0; font-size: 12px; color: var(--text-main); line-height: 1.45; }
+    .about ul { margin: 8px 0 0 18px; padding: 0; font-size: 12px; color: var(--text-main); }
+    .about li { margin: 4px 0; }
+    .about .meta { display:flex; gap:10px; flex-wrap: wrap; margin-top: 6px; }
+    .about .meta .chip { cursor: default; }
+
+    /* README modal */
+    .modal { display: none; position: fixed; inset: 0; z-index: 200; }
+    .modal.open { display: block; }
+    .modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(2px);
     }
-    .archive-table th, .archive-table td {
-      font-size: 11px;
+    .modal-dialog {
+      position: relative;
+      width: min(980px, calc(100% - 24px));
+      margin: 18px auto;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      max-height: calc(100vh - 36px);
+      overflow: hidden;
     }
-    .currency-label {
-      font-size: 11px;
-      color: var(--text-muted);
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245,247,251,0.7);
     }
-    .section-divider {
-      margin: 10px 0;
-      height: 1px;
-      background: #e5e7eb;
+    .modal-body {
+      padding: 14px 16px 16px;
+      overflow: auto;
+      max-height: calc(100vh - 140px);
     }
+
     @media (max-width: 900px) {
-      .layout {
-        flex-direction: column;
-      }
-      .card {
-        padding: 14px 14px 16px;
-      }
+      .layout { flex-direction: column; }
+      .card { padding: 14px 14px 16px; }
+      .modal-dialog { margin: 12px auto; }
     }
   </style>
 </head>
@@ -388,11 +355,14 @@
           <span>Asmeninis Donato įrankis (local only)</span>
         </div>
       </div>
+
       <div class="top-actions">
+        <button type="button" class="btn btn-sm secondary" id="readmeBtn">README</button>
         <button type="button" class="btn btn-sm secondary" id="newCalcBtn">Naujas skaičiavimas</button>
         <button type="button" class="btn btn-sm" id="saveDealTopBtn">Išsaugoti deal'ą</button>
         <button type="button" class="btn btn-sm secondary" id="openArchiveTopBtn">Archyvas</button>
       </div>
+
       <div class="summary-bar">
         <div class="summary-item">
           <div class="summary-label">Total KG</div>
@@ -829,6 +799,71 @@
     </div>
 
     <footer>© Donatas – vietinis deal checker įrankis (localStorage, be serverio)</footer>
+
+    <!-- README MODAL (paslėptas, atsidaro per header README mygtuką) -->
+    <div class="modal" id="readmeModal" aria-hidden="true">
+      <div class="modal-backdrop" id="readmeBackdrop"></div>
+
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="readmeTitle">
+        <div class="modal-header">
+          <div>
+            <div class="pill">B2B / Logistics / Client-side</div>
+            <h2 id="readmeTitle" style="margin:8px 0 0;">Deal Checker – projekto aprašas</h2>
+          </div>
+          <button class="btn btn-sm secondary" type="button" id="readmeCloseBtn">Uždaryti</button>
+        </div>
+
+        <div class="modal-body about">
+          <div class="meta">
+            <div class="chip highlight"><strong>Autorius:</strong> Donatas Vitėnas</div>
+            <div class="chip"><strong>Statusas:</strong> Veikiantis prototipas (ribotos apimties)</div>
+            <div class="chip"><strong>Architektūra:</strong> Tik client-side (be serverio)</div>
+            <div class="chip"><strong>Duomenys:</strong> localStorage (lokaliai)</div>
+          </div>
+
+          <h3>Projekto paskirtis</h3>
+          <p>
+            <strong>Deal Checker</strong> – veikiantis B2B skaičiavimo įrankis logistikos, transporto ir pardavimų situacijoms, kai reikia greitai
+            įvertinti sandorio pelningumą, suskaičiuoti kaštus, pajamas ir balansą bei parengti aiškų tekstą klientui.
+          </p>
+          <p>
+            Sprendimas sąmoningai sukurtas taip, kad būtų galima dirbti be serverio, be prisijungimų ir be sudėtingų sistemų – visa logika vyksta naršyklėje.
+          </p>
+
+          <h3>Sprendžiama problema</h3>
+          <p>
+            Tipinėje B2B praktikoje tenka dirbti su skirtingais kroviniais (KG, CBM), transporto tipais (AUTO / ORAS / JŪRA / MULTIMODAL) ir daug kaštų eilučių.
+            Tikslas – greitai suprasti, ar deal’as pelningas, kokią kainą pateikti klientui ir ką tiksliai komunikuoti.
+          </p>
+
+          <h3>Funkcionalumas</h3>
+          <ul>
+            <li><strong>Krovinio skaičiavimai:</strong> eilutės (KG, matmenys), automatinis CBM, bendri KG/CBM.</li>
+            <li><strong>Transporto logika:</strong> AUTO / ORAS / JŪRA / MULTIMODAL, LTL/FTL pagrindai, LDM (rankinis).</li>
+            <li><strong>Kaštai ir pajamos:</strong> laisvai pridedamos išlaidos, automatinės sumos, balansas (pelno/nuostolio) ir maržos logika.</li>
+            <li><strong>Tekstas klientui:</strong> automatinis generavimas LT/EN, pasirenkamas maršrutas/krovinio info/tik kaina, paruošta kopijavimui.</li>
+            <li><strong>Archyvas:</strong> deal’ų saugojimas naršyklėje (localStorage), be duomenų siuntimo į išorę.</li>
+          </ul>
+
+          <h3>Ribotos apimties sprendimas (sąmoningas pasirinkimas)</h3>
+          <p>
+            Projektas sąmoningai neturi serverinės dalies: nėra duomenų bazės, naudotojų valdymo, API raktų ir integracijų su išorinėmis sistemomis.
+            Tai leidžia įrankį greitai naudoti, skaidriai demonstruoti verslo logiką ir išvengti infrastruktūrinės/teisinės naštos.
+          </p>
+
+          <h3>Tikslinė auditorija</h3>
+          <ul>
+            <li>Logistikos ir transporto specialistai</li>
+            <li>B2B pardavimų vadybininkai</li>
+            <li>Verslo vadovai</li>
+            <li>HR (praktinių kompetencijų vertinimui)</li>
+            <li>Asmeninis / profesionalus portfelis</li>
+          </ul>
+
+          <div class="inline-note">© Donatas Vitėnas</div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script>
@@ -937,6 +972,27 @@
     const tariffApiStatus = document.getElementById("tariffApiStatus");
     const postDealStatus = document.getElementById("postDealStatus");
 
+    // README modal
+    const readmeBtn = document.getElementById("readmeBtn");
+    const readmeModal = document.getElementById("readmeModal");
+    const readmeBackdrop = document.getElementById("readmeBackdrop");
+    const readmeCloseBtn = document.getElementById("readmeCloseBtn");
+
+    function openReadme() {
+      readmeModal.classList.add("open");
+      readmeModal.setAttribute("aria-hidden", "false");
+    }
+    function closeReadme() {
+      readmeModal.classList.remove("open");
+      readmeModal.setAttribute("aria-hidden", "true");
+    }
+    if (readmeBtn) readmeBtn.addEventListener("click", openReadme);
+    if (readmeBackdrop) readmeBackdrop.addEventListener("click", closeReadme);
+    if (readmeCloseBtn) readmeCloseBtn.addEventListener("click", closeReadme);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && readmeModal.classList.contains("open")) closeReadme();
+    });
+
     // ======================== HELPERS =============================
     function parseNum(value) {
       const n = parseFloat(value);
@@ -971,8 +1027,6 @@
       const newRate = fxRates[newCurrency] || 1;
       if (!oldRate || !newRate) return;
 
-      const factor = newRate / oldRate; // because base is EUR
-
       const moneyInputs = document.querySelectorAll(".money-input");
       moneyInputs.forEach((inp) => {
         const v = parseNum(inp.value);
@@ -982,7 +1036,6 @@
         inp.value = formatMoney(converted);
       });
 
-      // recompute totals in new currency from scratch based on inputs
       recalcAll();
       updateCurrencyLabels();
     }
@@ -1052,7 +1105,6 @@
       delBtn.textContent = "✕";
       delBtn.addEventListener("click", () => {
         row.remove();
-        // Re-index
         Array.from(cargoBody.children).forEach((tr, idx) => {
           tr.firstChild.textContent = idx + 1;
         });
@@ -1257,11 +1309,7 @@
         const container = seaContainer.value;
         if (container === "40DC") maxCBM = 67;
         if (container === "40HC") maxCBM = 76;
-        if (cbm > maxCBM) {
-          seaCapacityWarning.style.display = "block";
-        } else {
-          seaCapacityWarning.style.display = "none";
-        }
+        seaCapacityWarning.style.display = cbm > maxCBM ? "block" : "none";
       }
     }
 
@@ -1285,10 +1333,8 @@
 
       const balance = usedRevenue - costsVal;
       summaryBalance.value = formatMoney(balance);
-      summaryMarginPercent.value =
-        costsVal > 0 ? ((balance / costsVal) * 100).toFixed(2) : "0.00";
+      summaryMarginPercent.value = costsVal > 0 ? ((balance / costsVal) * 100).toFixed(2) : "0.00";
 
-      // balance note + header summary coloring
       if (balance > 0.0001) {
         balanceNote.textContent = "Balansas teigiamas – deal'as pelningas.";
         balanceNote.classList.remove("warning");
@@ -1324,61 +1370,33 @@
         const totals = computeCargoTotals();
         cargoSummary =
           (lang === "LT"
-            ? "Krovinys: bendras svoris " +
-              totals.totalKG.toFixed(2) +
-              " kg, bendras tūris " +
-              formatCBM(totals.totalCBM) +
-              " m³."
-            : "Cargo: total weight " +
-              totals.totalKG.toFixed(2) +
-              " kg, total volume " +
-              formatCBM(totals.totalCBM) +
-              " m³.");
+            ? "Krovinys: bendras svoris " + totals.totalKG.toFixed(2) + " kg, bendras tūris " + formatCBM(totals.totalCBM) + " m³."
+            : "Cargo: total weight " + totals.totalKG.toFixed(2) + " kg, total volume " + formatCBM(totals.totalCBM) + " m³.");
       }
 
       let priceText =
         revenueVal > 0
           ? (lang === "LT"
-              ? "Galutinė siūloma kaina: " +
-                formatMoney(revenueVal) +
-                " " +
-                currency +
-                "."
-              : "Final offered price: " +
-                formatMoney(revenueVal) +
-                " " +
-                currency +
-                ".")
+              ? "Galutinė siūloma kaina: " + formatMoney(revenueVal) + " " + currency + "."
+              : "Final offered price: " + formatMoney(revenueVal) + " " + currency + ".")
           : "";
 
       let text = "";
       if (lang === "LT") {
         text += "Sveiki,\n\n";
         if (!onlyFinalPrice.checked) {
-          if (usedRoute) {
-            text += "Maršrutas: " + usedRoute + ".\n";
-          }
-          if (cargoSummary) {
-            text += cargoSummary + "\n";
-          }
+          if (usedRoute) text += "Maršrutas: " + usedRoute + ".\n";
+          if (cargoSummary) text += cargoSummary + "\n";
         }
-        if (priceText) {
-          text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
-        }
+        if (priceText) text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
         text += "\nJei reikės korekcijų ar papildomos informacijos – parašykite.";
       } else {
         text += "Hello,\n\n";
         if (!onlyFinalPrice.checked) {
-          if (usedRoute) {
-            text += "Route: " + usedRoute + ".\n";
-          }
-          if (cargoSummary) {
-            text += cargoSummary + "\n";
-          }
+          if (usedRoute) text += "Route: " + usedRoute + ".\n";
+          if (cargoSummary) text += cargoSummary + "\n";
         }
-        if (priceText) {
-          text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
-        }
+        if (priceText) text += (onlyFinalPrice.checked ? "" : "\n") + priceText + "\n";
         text += "\nIf you need any changes or additional details, let me know.";
       }
 
@@ -1418,18 +1436,12 @@
 
       const multimodal = Array.from(multiBody.children).map((tr) => {
         const inputs = tr.querySelectorAll("input");
-        return {
-          type: inputs[0].value || "",
-          price: parseNum(inputs[1].value)
-        };
+        return { type: inputs[0].value || "", price: parseNum(inputs[1].value) };
       });
 
       const costs = Array.from(costsBody.children).map((tr) => {
         const inputs = tr.querySelectorAll("input");
-        return {
-          name: inputs[0].value || "",
-          amount: parseNum(inputs[1].value)
-        };
+        return { name: inputs[0].value || "", amount: parseNum(inputs[1].value) };
       });
 
       const transport = {
@@ -1458,7 +1470,7 @@
       const route = routeInput.value || "";
       const notes = dealNotes.value || "";
 
-      const deal = {
+      return {
         id: "D" + Date.now(),
         timestamp: new Date().toISOString(),
         currency: currentCurrency,
@@ -1471,58 +1483,39 @@
         route,
         notes
       };
-      return deal;
     }
 
     function loadDealIntoForm(deal) {
-      // Clear existing rows
       cargoBody.innerHTML = "";
       multiBody.innerHTML = "";
       costsBody.innerHTML = "";
 
-      // Currency
       if (deal.currency && fxRates[deal.currency] !== undefined) {
-        const oldCur = currentCurrency;
         currentCurrency = deal.currency;
         currencySelect.value = deal.currency;
         updateCurrencyLabels();
-        // We will assign values in that currency directly
       }
 
-      // Cargo
       (deal.cargo || []).forEach((row) => addCargoRow(row));
       if ((deal.cargo || []).length === 0) addCargoRow();
 
-      // Multimodal
-      (deal.transport && deal.transport.multimodal || []).forEach((row) =>
-        addMultiRow(row)
-      );
-      if ((deal.transport && deal.transport.multimodal || []).length === 0)
-        addMultiRow();
+      ((deal.transport && deal.transport.multimodal) || []).forEach((row) => addMultiRow(row));
+      if (((deal.transport && deal.transport.multimodal) || []).length === 0) addMultiRow();
 
-      // Costs
       (deal.costs || []).forEach((row) => addCostRow(row));
       if ((deal.costs || []).length === 0) addCostRow();
 
-      // Transport meta
       if (deal.transport) {
         transportType.value = deal.transport.type || "AUTO";
         autoMode.value = deal.transport.autoMode || "LTL";
-        autoLDM.value =
-          deal.transport.autoLDM !== undefined ? deal.transport.autoLDM : "";
+        autoLDM.value = deal.transport.autoLDM !== undefined ? deal.transport.autoLDM : "";
         autoTrailer.value = deal.transport.autoTrailer || "Tentas";
-        seaMode.value = deal.transport.sea && deal.transport.sea.mode
-          ? deal.transport.sea.mode
-          : "LCL";
-        seaContainer.value =
-          deal.transport.sea && deal.transport.sea.container
-            ? deal.transport.sea.container
-            : "20DC";
+        seaMode.value = (deal.transport.sea && deal.transport.sea.mode) ? deal.transport.sea.mode : "LCL";
+        seaContainer.value = (deal.transport.sea && deal.transport.sea.container) ? deal.transport.sea.container : "20DC";
       }
 
-      marginPercent.value =
-        deal.marginPercent !== undefined ? deal.marginPercent : 10;
-      manualRevenue.value = ""; // paliekame tuščią – naudoti procentą arba vartotojo sprendimą
+      marginPercent.value = deal.marginPercent !== undefined ? deal.marginPercent : 10;
+      manualRevenue.value = "";
       routeInput.value = deal.route || "";
       dealNotes.value = deal.notes || "";
 
@@ -1530,9 +1523,7 @@
     }
 
     function renderArchiveTable() {
-      const list = getArchive().slice().sort((a, b) => {
-        return new Date(b.timestamp) - new Date(a.timestamp);
-      });
+      const list = getArchive().slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       archiveBody.innerHTML = "";
       list.forEach((deal) => {
         const tr = document.createElement("tr");
@@ -1543,8 +1534,7 @@
 
         const dateTd = document.createElement("td");
         const d = new Date(deal.timestamp);
-        dateTd.textContent =
-          isNaN(d.getTime()) ? "-" : d.toLocaleString("lt-LT");
+        dateTd.textContent = isNaN(d.getTime()) ? "-" : d.toLocaleString("lt-LT");
         tr.appendChild(dateTd);
 
         const curTd = document.createElement("td");
@@ -1589,18 +1579,15 @@
     function recalcAll() {
       const cargoTotals = computeCargoTotals();
 
-      // Transport
       updateTransportVisibility();
       updateAutoModeVisibility();
       updateAutoLdmUsage();
       updateAirFromCargo(cargoTotals);
       updateSeaFromCargo(cargoTotals);
 
-      // Multimodal + costs
       const multiTotalVal = computeMultiTotal();
       const costs = computeCostsTotal(multiTotalVal);
 
-      // Margin, revenue and balance
       updateMarginAndRevenue(costs.sum);
       updateCurrencyLabels();
     }
@@ -1621,10 +1608,7 @@
         fxRates.PLN = result.rates.PLN || fxRates.PLN;
 
         ratesInfo.textContent =
-          "EUR → USD: " +
-          fxRates.USD.toFixed(4) +
-          " | EUR → GBP: " +
-          fxRates.GBP.toFixed(4);
+          "EUR → USD: " + fxRates.USD.toFixed(4) + " | EUR → GBP: " + fxRates.GBP.toFixed(4);
         fxApiStatus.textContent = "Kursai sėkmingai atnaujinti.";
         fxApiStatus.classList.add("success");
       } catch (e) {
@@ -1649,18 +1633,12 @@
       }
       tariffApiStatus.textContent = "Kreipiamasi į demo API...";
       try {
-        // Naudojame viešą demo API (placeholder)
         const res = await apiRequest("https://jsonplaceholder.typicode.com/posts/1");
         if (res.error) throw new Error(res.error);
-        // Pavyzdinė logika: pseudo kaina = weight * 3
         const price = weight * 3;
         addCostRow({ name: "API Transporto tarifas (" + origin + "–" + dest + ")", amount: price });
         tariffApiStatus.textContent =
-          "Tarifas gautas ir pridėtas prie išlaidų: " +
-          formatMoney(price) +
-          " " +
-          currentCurrency +
-          ".";
+          "Tarifas gautas ir pridėtas prie išlaidų: " + formatMoney(price) + " " + currentCurrency + ".";
         tariffApiStatus.classList.add("success");
         recalcAll();
       } catch (e) {
@@ -1676,19 +1654,13 @@
       const deal = buildDealObject();
       postDealStatus.textContent = "Siunčiama demo užklausa...";
       try {
-        const res = await apiRequest(
-          "https://example.com/api/saveDeal",
-          "POST",
-          deal,
-          "DEMO_TOKEN"
-        );
+        const res = await apiRequest("https://example.com/api/saveDeal", "POST", deal, "DEMO_TOKEN");
         if (res.error) throw new Error(res.error);
         postDealStatus.textContent = "Deal sėkmingai išsiųstas (demo).";
         postDealStatus.classList.add("success");
       } catch (e) {
         postDealStatus.textContent =
-          "Tik demonstracija – reali užklausa gali būti atmesta naršyklės dėl CORS. Klaida: " +
-          e.message;
+          "Tik demonstracija – reali užklausa gali būti atmesta naršyklės dėl CORS. Klaida: " + e.message;
         postDealStatus.classList.add("error");
       }
     }
@@ -1711,9 +1683,7 @@
 
     transportType.addEventListener("change", recalcAll);
     autoMode.addEventListener("change", recalcAll);
-    autoLDM.addEventListener("input", () => {
-      updateAutoLdmUsage();
-    });
+    autoLDM.addEventListener("input", () => updateAutoLdmUsage());
     seaMode.addEventListener("change", recalcAll);
     seaContainer.addEventListener("change", recalcAll);
 
@@ -1730,7 +1700,6 @@
     });
 
     updateRatesBtn.addEventListener("click", updateRates);
-
     document.getElementById("generateTextBtn").addEventListener("click", generateClientText);
 
     document.getElementById("copyTextBtn").addEventListener("click", async () => {
@@ -1766,30 +1735,28 @@
     document.getElementById("getTariffBtn").addEventListener("click", getTariffDemo);
     document.getElementById("postDealBtn").addEventListener("click", postDealDemo);
 
-
     function newCalculation() {
-      // Reset cargo, multimodal, costs
       cargoBody.innerHTML = "";
       multiBody.innerHTML = "";
       costsBody.innerHTML = "";
-      // Default one empty row for each
+
       addCargoRow();
       addMultiRow();
       addCostRow();
-      // Reset transport defaults
+
       transportType.value = "AUTO";
       autoMode.value = "LTL";
       autoLDM.value = "";
       autoTrailer.value = "Tentas";
       seaMode.value = "LCL";
       seaContainer.value = "20DC";
-      // Reset margin / revenue / route / notes / client text
+
       marginPercent.value = 10;
       manualRevenue.value = "";
       routeInput.value = "";
       dealNotes.value = "";
       clientText.value = "";
-      // Recalculate everything
+
       recalcAll();
     }
 
@@ -1797,6 +1764,7 @@
     if (newCalcBtn) {
       newCalcBtn.addEventListener("click", newCalculation);
     }
+
     const saveDealTopBtn = document.getElementById("saveDealTopBtn");
     if (saveDealTopBtn) {
       saveDealTopBtn.addEventListener("click", () => {
@@ -1807,6 +1775,7 @@
         renderArchiveTable();
       });
     }
+
     const openArchiveTopBtn = document.getElementById("openArchiveTopBtn");
     if (openArchiveTopBtn) {
       openArchiveTopBtn.addEventListener("click", () => {
@@ -1822,7 +1791,6 @@
     }
 
     window.addEventListener("load", () => {
-      // initial rows
       addCargoRow();
       addMultiRow();
       addCostRow();
